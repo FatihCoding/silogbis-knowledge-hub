@@ -1,4 +1,4 @@
-# SILOGBIS Knowledge Hub — Navigator V1
+# SILOGBIS Knowledge Hub — Navigator V1.1
 
 **Status: private-content-safe pilot, not public launch.**
 
@@ -11,7 +11,7 @@ Website statis SILOGBIS dengan logo resmi, lima hub akademik, 27 topik, pencaria
 - Filter lima hub dan browsing 27 subkategori.
 - Guided navigation berdasarkan tujuan (mata kuliah / KP / kompetisi / riset).
 - Tampilan mobile & desktop, navigasi keyboard, reduced motion, focus states.
-- Tiga kartu kontribusi yang **disabled** selama pilot.
+- Tiga kartu kontribusi: tombol panduan selalu interaktif; tautan pengiriman baru aktif setelah Form dibuka dan disetujui.
 - Katalog hanya menampilkan record bila `Published` + `Public` + `rightsVerified: true` + `privacyCleared: true`.
 - `noindex` dan minimal security headers untuk tahap pilot; script validasi sebelum deploy.
 
@@ -107,12 +107,12 @@ Simpan record dalam array JSON di `public/data/catalog.json`. Validasi akan meno
 
 ## Google Forms
 
-Default: ketiganya **tidak aktif**. Baru hidupkan satu Form jika:
+Default: ketiganya **tidak aktif**, tetapi tombol **Lihat alur kontribusi** bisa dibuka. Baru hidupkan satu Form jika:
 - Form resmi sudah dibuka oleh Admin SILOGBIS dan diuji ulang.
 - Pemberitahuan privasi, consent, dan trigger Form sudah dicek.
 - `site-config.json` diubah: `mode: "public"`, `enabled: true`, dan `url` hanya `https://docs.google.com/forms/.../viewform` (bukan link edit).
 
-Mode pilot sengaja menolak menyimpan URL Form sama sekali dalam JSON publik. `noindex` juga aktif hingga release.
+Saat Form dinyatakan siap digunakan, izinkan `enabled: true`, `qaVerified: true`, `privacyNoticeApproved: true`, dan `url` responden yang benar pada `site-config.json`. Mode pilot tetap `noindex` tetapi bukan akses privat. Jangan menyalakan Form tanpa persetujuan. `noindex` juga aktif hingga release.
 
 ## GO LIVE (jangan dilakukan sebelum QA)
 
@@ -134,3 +134,15 @@ Mode pilot sengaja menolak menyimpan URL Form sama sekali dalam JSON publik. `no
 - Untuk rollback gunakan GitHub revert / Cloudflare Deployments versi sebelumnya.
 
 **Backend Google Workspace yang sudah ada tidak perlu diubah atau dijalankan ulang.**
+
+## V1.1 — Mengapa tombol V1 tampak tidak bekerja?
+
+- `public/data/catalog.json` awalnya `[]`, sehingga topik memang tidak memiliki link resource. Saat ini klik topik tetap membuka panel yang menjelaskan status dan memberi aksi nyata: jelajahi topik lain / cara berkontribusi.
+- Ketiga Form masih `enabled: false` dan Google Forms ditutup oleh admin, sehingga tombol kirim **sengaja** tidak aktif. Namun sekarang setiap kartu punya tombol **Lihat alur kontribusi** yang berfungsi.
+- Tidak ada API frontend ke Master Control karena itu berisiko membocorkan data.
+
+### Hubungkan Master secara aman ke website
+
+Lihat `backend/README_EXPORT.md`: file Apps Script untuk menghasilkan `catalog.json` dari **baris Master yang Published + Public, punya approval rights/privacy, serta checklist rilis**. Hasil ekspor disimpan dalam folder administrasi privat untuk dipasang secara sadar ke `public/data/catalog.json` di GitHub. Cloudflare akan memperbarui website setelah commit.
+
+**Penting:** ini sinkronisasi terkontrol, bukan live API dan bukan auto-publish. Itu sengaja agar setiap publikasi melewati review dan tidak terjadi kebocoran kontak, folder atau metadata internal.

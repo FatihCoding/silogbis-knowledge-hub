@@ -1,0 +1,20 @@
+SILOGBIS Navigator V1.1
+
+KENAPA WEBSITE V1 TERASA TIDAK TERHUBUNG:
+- catalog.json = [] (tidak ada resource publik yang bisa dibuka)
+- forms disabled, unpublished, closed (tombol Isi Form sengaja belum aktif)
+- website statis secara sengaja tidak mengakses Master Control privat
+
+YANG DIPERBAIKI V1.1:
+- Klik topik selalu memberi konteks dan tombol tindak lanjut
+- Browse topik dan search mengikuti filter dengan benar
+- Form mempunyai tombol Lihat alur kontribusi yang interaktif
+- Form dapat dinyalakan satu-per-satu setelah QA melalui site-config.json
+- Apps Script exporter disiapkan untuk menghasilkan catalog.json dari Master secara aman
+
+DEPLOY:
+1. Upload isi paket ini untuk MENGGANTI FILE yang sama di repository GitHub, bukan membuat repo baru.
+2. Jangan upload backend Google Sheets atau email kontak alumni.
+3. Commit, tunggu Cloudflare deployment Success, refresh website.
+4. Katalog masih 0 sampai admin menambahkan resource approved.
+5. Form tetap closed sampai admin memberi izin dan mengubah konfigurasi.

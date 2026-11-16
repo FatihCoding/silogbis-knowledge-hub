@@ -12,7 +12,17 @@ const resourceIds=new Set();
 for(const r of Array.isArray(catalog)?catalog:[]){if(resourceIds.has(r.id))add('Duplicate resource ID: '+String(r.id));resourceIds.add(r.id);if(r.status!=='Published'||r.accessLevel!=='Public'||r.rightsVerified!==true||r.privacyCleared!==true)add('Unsafe record in public catalog: '+String(r.id));if(!topicIds.has(r.hubId+':'+r.topicId))add('Invalid hub/topic mapping: '+String(r.id));try{const u=new URL(r.url);if(u.protocol!=='https:'||u.username||u.password)add('Invalid HTTPS URL: '+String(r.id));}catch{add('Invalid URL: '+String(r.id));}if(!r.title||!r.id)add('Catalog record missing id/title.');}
 if(!['pilot','public'].includes(config.mode))add('mode must be pilot or public.');
 if(!Array.isArray(config.forms)||config.forms.length!==3)add('Exactly 3 contribution form configs required.');
-for(const f of config.forms||[]){if(config.mode==='pilot'&&f.url)add('Pilot must not include Form URLs in public JSON: '+f.id);if(f.enabled){try{const u=new URL(f.url);if(u.protocol!=='https:'||u.hostname!=='docs.google.com'||!u.pathname.startsWith('/forms/'))add('Form URL is invalid: '+f.id);}catch{add('Enabled form has no valid Google Forms URL: '+f.id);}}}
+for(const f of config.forms||[]){
+  if(f.enabled){
+    if(f.qaVerified!==true||f.privacyNoticeApproved!==true)add('Enabled Form missing human approval flags: '+f.id);
+    try{
+      const u=new URL(f.url);
+      if(u.protocol!=='https:'||u.hostname!=='docs.google.com'||!/^\/forms\/d\/e\/[^/]+\/viewform\/?$/.test(u.pathname))
+        add('Enabled Form URL must be a respondent viewform URL: '+f.id);
+    }catch{add('Enabled form has no valid Google Forms URL: '+f.id);}
+  }
+  if(!f.enabled && f.url)add('A disabled Form should not store its URL in public JSON: '+f.id);
+}
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');const hasNoIndex=html.includes('name="robots" content="noindex,nofollow"');
 if(config.mode==='pilot'&&!hasNoIndex)add('Pilot must remain noindex.');
 if(config.mode==='public'&&hasNoIndex)add('Public launch still has noindex; require explicit release edit.');

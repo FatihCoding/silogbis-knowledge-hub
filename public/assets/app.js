@@ -13,7 +13,7 @@ const create=(tag,className,text)=>{const el=document.createElement(tag);if(clas
 const getHub=id=>state.hubs.find(x=>x.id===id);
 const searchText=x=>[x.name,x.description,x.subtitle,...(x.keywords||[])].join(' ').toLocaleLowerCase('id');
 const safeExternal=url=>{try{const u=new URL(url);return u.protocol==='https:'&&!u.username&&!u.password;}catch{return false;}};
-const safeFormUrl=url=>{try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='docs.google.com'&&u.pathname.startsWith('/forms/');}catch{return false;}};
+const safeFormUrl=url=>{try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='docs.google.com'&&/^\/forms\/d\/e\/[^/]+\/viewform\/?$/.test(u.pathname);}catch{return false;}};
 const visibleResource=r=>r&&r.status==='Published'&&r.accessLevel==='Public'&&r.rightsVerified===true&&r.privacyCleared===true&&safeExternal(r.url)&&getHub(r.hubId)?.topics.some(t=>t.id===r.topicId);
 const normalize=x=>String(x??'').trim().toLocaleLowerCase('id');
 const searchMatches=(hub,topic,q)=>{if(!q)return true;const taxonomyHit=normalize([hub.name,hub.description,hub.subtitle,topic.name,...(topic.keywords||[])].join(' ')).includes(q);const resourceHit=state.catalog.filter(visibleResource).some(r=>r.hubId===hub.id&&r.topicId===topic.id&&normalize([r.title,r.summary,r.type,r.year].join(' ')).includes(q));return taxonomyHit||resourceHit;};
@@ -22,8 +22,103 @@ function usePath(purpose){if(!PATHS[purpose])return;state.path=purpose;renderPat
 function goToPath(){state.hub=PATHS[state.path].hub;state.query='';$('searchInput').value='';state.topic=null;renderAll();$('directory').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 function renderFilters(){const root=$('hubFilters');root.replaceChildren();const opts=[{id:'all',name:'Semua hub'},...state.hubs.map(h=>({id:h.id,name:h.name}))];for(const o of opts){const b=create('button','hub-filter'+(state.hub===o.id?' active':''),o.name);b.type='button';b.setAttribute('aria-pressed',String(state.hub===o.id));b.addEventListener('click',()=>{state.hub=o.id;state.topic=null;renderAll();});root.append(b);}}
 function renderDirectory(){const grid=$('directoryGrid');grid.replaceChildren();let matchedTopics=0;let matchedHubs=0;const q=normalize(state.query);for(const hub of state.hubs){if(state.hub!=='all'&&hub.id!==state.hub)continue;const relevant=hub.topics.filter(t=>searchMatches(hub,t,q));if(!relevant.length)continue;matchedHubs++;matchedTopics+=relevant.length;const article=create('article','hub-card');const top=create('div','hub-card-top');top.append(create('div','hub-symbol',ICONS[hub.id]||'▤'));const info=create('div','hub-card-title');info.append(create('span','',hub.subtitle.toUpperCase()),create('h3','',hub.name),create('p','',`${relevant.length} topik terstruktur`));top.append(info);article.append(top,create('p','hub-card-body',hub.description));const bottom=create('div','hub-card-bottom');bottom.append(create('span','hub-count',`${hub.topics.length} learning topics`));const expand=create('button','hub-expand','Browse topics ↗');expand.type='button';expand.setAttribute('aria-expanded','false');bottom.append(expand);article.append(bottom);const topics=create('div','hub-topic-list');const isExpanded=Boolean(q)||state.hub===hub.id;const setOpen=expanded=>{article.classList.toggle('expanded',expanded);expand.setAttribute('aria-expanded',String(expanded));expand.textContent=expanded?'Close topics ↑':'Browse topics ↗';};for(const topic of relevant){const btn=create('button','topic-button'+(state.topic?.hub===hub.id&&state.topic?.topic===topic.id?' selected':''),topic.name+' ↗');btn.type='button';btn.addEventListener('click',()=>{state.topic={hub:hub.id,topic:topic.id};renderResources();document.querySelectorAll('.topic-button').forEach(el=>el.classList.remove('selected'));btn.classList.add('selected');$('resources').scrollIntoView({behavior:'smooth'});});topics.append(btn);}expand.addEventListener('click',()=>setOpen(!article.classList.contains('expanded')));article.append(topics);setOpen(isExpanded);grid.append(article);}const has=matchedHubs>0;$('directoryEmpty').hidden=has;$('searchStatus').textContent=has?`${matchedTopics} topik ditemukan dalam ${matchedHubs} hub`:'Tidak ada hasil pada filter saat ini.';}
-function renderResources(){const q=normalize(state.query);const filtered=state.catalog.filter(visibleResource).filter(r=>!state.topic||(state.topic.hub===r.hubId&&state.topic.topic===r.topicId)).filter(r=>!q||normalize([r.title,r.summary,r.type,r.year,getHub(r.hubId)?.name,getHub(r.hubId)?.topics.find(t=>t.id===r.topicId)?.name].join(' ')).includes(q));const topic=state.topic?getHub(state.topic.hub)?.topics.find(t=>t.id===state.topic.topic):null;$('activeTopic').hidden=!topic;$('clearTopic').hidden=!topic;if(topic)$('activeTopic').textContent=`Topik terpilih: ${topic.name}`;$('resourceCount').textContent=String(filtered.length);const list=$('resourceList');list.replaceChildren();if(!filtered.length){const empty=create('div','resource-empty');empty.append(create('div','empty-icon','▥'),create('strong','',topic?'Belum ada resource pada topik ini':'Katalog sedang dikurasi'),create('p','',topic?'Topik sudah disiapkan. Resource akan muncul setelah ada kontribusi yang lolos verifikasi.':'Topik library sudah tersedia. Dokumen publik akan ditampilkan di sini setelah diverifikasi—tanpa mengorbankan privasi atau izin berbagi.'));list.append(empty);return;}for(const r of filtered){const card=create('article','resource-item');const body=create('div');body.append(create('strong','',r.title),create('p','',r.summary||''));const meta=getHub(r.hubId)?.name+' · '+(r.year||'Unspecified year');body.append(create('span','resource-meta',meta));const link=create('a','', 'Open resource ↗');link.href=r.url;link.target='_blank';link.rel='noopener noreferrer';card.append(body,link);list.append(card);}}
-function renderForms(){const root=$('formCards');root.replaceChildren();for(const [index,f] of state.forms.entries()){const live=state.mode==='public'&&f.enabled===true&&safeFormUrl(f.url);const card=create('article','form-card');card.append(create('span','form-index',`CONTRIBUTE / 0${index+1}`),create('h3','',f.title),create('p','',f.description));if(live){const a=create('a','', 'Isi Form ↗');a.href=f.url;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}else{card.append(create('span','', 'Belum dibuka'));}root.append(card);}}
+function renderResources(){
+  const q=normalize(state.query);
+  const filtered=state.catalog.filter(visibleResource)
+    .filter(r=>state.hub==='all'||state.hub===r.hubId)
+    .filter(r=>!state.topic||(state.topic.hub===r.hubId&&state.topic.topic===r.topicId))
+    .filter(r=>{
+      if(!q) return true;
+      const hub=getHub(r.hubId);
+      const topic=hub?.topics.find(t=>t.id===r.topicId);
+      const topicMatch=normalize([hub?.name,hub?.description,topic?.name,...(topic?.keywords||[])].join(' ')).includes(q);
+      return topicMatch||normalize([r.title,r.summary,r.type,r.year].join(' ')).includes(q);
+    });
+  const selectedHub=state.topic?getHub(state.topic.hub):null;
+  const topic=state.topic?selectedHub?.topics.find(t=>t.id===state.topic.topic):null;
+  $('activeTopic').hidden=!topic;
+  $('clearTopic').hidden=!topic;
+  if(topic) $('activeTopic').textContent=`${selectedHub.name} / ${topic.name}`;
+  $('resourceCount').textContent=String(filtered.length);
+  const list=$('resourceList');
+  list.replaceChildren();
+  if(!filtered.length){
+    const empty=create('div','resource-empty');
+    empty.append(create('div','empty-icon',topic?'↗':'▥'));
+    empty.append(create('strong','',topic?topic.name:'Katalog sedang dikurasi'));
+    empty.append(create('p','',topic
+      ?`Koleksi ${topic.name} belum memiliki dokumen yang disetujui untuk publik. Topiknya sudah aktif di navigator, tetapi file hanya bisa ditampilkan setelah izin akses dan privasi diverifikasi.`
+      :'Navigasi, filter, dan pencarian sudah aktif. Resource akan muncul setelah diverifikasi dan dirilis dari Master Control oleh pengurus SILOGBIS.'));
+    const actions=create('div','empty-actions');
+    const explore=create('button','empty-action','Jelajahi topik lain ↗');
+    explore.type='button';
+    explore.addEventListener('click',()=>{
+      state.topic=null;
+      state.query='';
+      $('searchInput').value='';
+      renderAll();
+      $('directory').scrollIntoView({behavior:'smooth'});
+    });
+    const contribute=create('a','empty-action secondary','Cara berkontribusi ↗');
+    contribute.href='#contribute';
+    actions.append(explore,contribute);
+    empty.append(actions);
+    list.append(empty);
+    return;
+  }
+  for(const r of filtered){
+    const card=create('article','resource-item');
+    const body=create('div');
+    body.append(create('strong','',r.title),create('p','',r.summary||''));
+    const hub=getHub(r.hubId);
+    const meta=hub?.name+' · '+(r.year||'Tahun tidak dicantumkan');
+    body.append(create('span','resource-meta',meta));
+    const link=create('a','', 'Buka resource ↗');
+    link.href=r.url;
+    link.target='_blank';
+    link.rel='noopener noreferrer';
+    card.append(body,link);
+    list.append(card);
+  }
+}
+function renderForms(){
+  const root=$('formCards');
+  root.replaceChildren();
+  for(const [index,f] of state.forms.entries()){
+    const live=f.enabled===true&&f.qaVerified===true&&f.privacyNoticeApproved===true&&safeFormUrl(f.url);
+    const card=create('article','form-card');
+    card.append(create('span','form-index',`CONTRIBUTE / 0${index+1}`),create('h3','',f.title),create('p','',f.description));
+    if(live){
+      const a=create('a','', 'Isi formulir ↗');
+      a.href=f.url;
+      a.target='_blank';
+      a.rel='noopener noreferrer';
+      card.append(a);
+    } else {
+      card.append(create('span','', 'Form belum dibuka'));
+    }
+    const detailBtn=create('button','form-more-btn','Lihat alur kontribusi ↓');
+    detailBtn.type='button';
+    detailBtn.setAttribute('aria-expanded','false');
+    const detail=create('div','form-detail');
+    detail.hidden=true;
+    const what=f.id==='alumni'
+      ?'Profil alumni hanya diproses dengan persetujuan. Kontak pribadi tidak masuk direktori publik.'
+      :f.id==='kp'
+      ?'Siapkan pengalaman KP/magang yang tidak mengungkap informasi rahasia perusahaan.'
+      :'Siapkan judul, kegunaan, kategori, dan URL sumber yang memang boleh dibagikan.';
+    detail.append(create('p','',what));
+    detail.append(create('p','',live?'Setelah dikirim, kontribusi akan masuk antrean review SILOGBIS.':'Form masih ditutup oleh admin setelah pilot. Ketika dibuka resmi, tautannya akan muncul di sini.'));
+    detailBtn.addEventListener('click',()=>{
+      const open=detail.hidden;
+      detail.hidden=!open;
+      detailBtn.setAttribute('aria-expanded',String(open));
+      detailBtn.textContent=open?'Tutup panduan ↑':'Lihat alur kontribusi ↓';
+    });
+    card.append(detailBtn,detail);
+    root.append(card);
+  }
+}
 function renderAll(){renderFilters();renderDirectory();renderResources();renderForms();}
 async function loadJson(url){const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('Failed to load '+url+' ('+response.status+')');return response.json();}
 function verifyTaxonomy(hubs){if(!Array.isArray(hubs)||hubs.length!==5)throw Error('Taxonomy belum sesuai: lima hub diperlukan.');for(const hub of hubs){if(!hub.id||!hub.name||!Array.isArray(hub.topics))throw Error('Format taxonomy tidak sesuai.');for(const topic of hub.topics){if(!topic.id||!topic.name||!Array.isArray(topic.keywords))throw Error('Topik tidak lengkap.');}}return hubs;}
