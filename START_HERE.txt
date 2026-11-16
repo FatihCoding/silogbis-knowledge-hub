@@ -1,0 +1,14 @@
+SILOGBIS KNOWLEDGE HUB — START HERE
+
+1. Ini adalah frontend website yang terpisah dari Apps Script/Google Drive backend.
+2. Seluruh file ada dalam folder ini. Jangan unggah Master Control atau Alumni Registry ke website.
+3. Buka README.md untuk panduan langkah demi langkah GitHub + Cloudflare.
+4. Saat ini mode PILOT: Search dan navigasi berfungsi; katalog publik belum diisi; kontribusi Form dinonaktifkan; Google NOINDEX.
+5. Login GitHub milik organisasi, buat repository PRIVATE silogbis-knowledge-hub.
+6. Upload ISI folder ini ke root repo. Pastikan public/, scripts/, wrangler.jsonc, package.json ada di root.
+7. Cloudflare Workers & Pages > Create application > GitHub > pilih repo.
+8. Worker name: silogbis-knowledge-hub, root /, build npm run build, deploy npx wrangler deploy.
+9. Setelah deploy, cek desktop/mobile; jangan promosikan link pilot sampai QA dan approval.
+10. Resource publik dimasukkan manual hanya sesudah Publish + Public + rights/privacy clearance.
+
+NOTE: Frontend tidak membutuhkan database, token, akun pengguna, atau Worker API. Noindex bukan password.

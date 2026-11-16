@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0-pilot",
+  "siteName": "SILOGBIS Knowledge Hub",
+  "mode": "pilot",
+  "forms": [
+    {"id":"resource","title":"Share a Resource","description":"Bagikan materi atau referensi yang memiliki izin untuk dibagikan.","enabled":false,"url":""},
+    {"id":"kp","title":"Share Your KP Journey","description":"Cerita KP dan pengalaman magang untuk membantu angkatan berikutnya.","enabled":false,"url":""},
+    {"id":"alumni","title":"Connect as Alumni","description":"Bergabung dalam jejaring dan berbagi pengalaman secara sukarela.","enabled":false,"url":""}
+  ]
+}

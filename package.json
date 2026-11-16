@@ -1,0 +1,15 @@
+{
+  "name": "silogbis-knowledge-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SILOGBIS Knowledge Hub: curated, static and privacy-first navigation",
+  "scripts": {
+    "build": "node scripts/validate.mjs",
+    "check": "node scripts/validate.mjs",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.48.0"
+  }
+}

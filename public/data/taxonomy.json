@@ -1,0 +1,39 @@
+[
+  {"id":"academic","name":"Academic Resources","subtitle":"Build strong fundamentals","description":"Belajar lebih terarah dengan materi kuliah, catatan, dan sumber resmi.","accent":"#328ecb","topics":[
+    {"id":"course-materials","name":"Course Materials","keywords":["perkuliahan","materi kuliah","mata kuliah","lecture","modul"]},
+    {"id":"open-references","name":"Open-Access References","keywords":["buku gratis","ebook legal","jurnal","open access","reference"]},
+    {"id":"study-notes","name":"Study Notes & Learning Guides","keywords":["catatan","belajar","resume","ringkasan"]},
+    {"id":"exam-preparation","name":"Practice & Exam Preparation","keywords":["UTS","UAS","latihan","contoh soal","exam"]},
+    {"id":"academic-templates","name":"Academic Templates","keywords":["template","laporan","presentasi","makalah"]}
+  ]},
+  {"id":"internship","name":"KP & Internship","subtitle":"Learn from real-world experience","description":"Persiapkan KP dan magang melalui referensi serta pengalaman senior.","accent":"#2188bb","topics":[
+    {"id":"kp-guidelines","name":"Getting Started & Guidelines","keywords":["panduan KP","magang","internship","administrasi"]},
+    {"id":"company-insights","name":"Company & Role Insights","keywords":["perusahaan","company","role","divisi","industri"]},
+    {"id":"kp-reports","name":"KP & Internship Reports","keywords":["laporan KP","laporan kerja praktik","internship report"]},
+    {"id":"kp-lessons","name":"Experience & Lessons Learned","keywords":["pengalaman","cerita magang","tips KP"]},
+    {"id":"kp-applications","name":"Applications & Templates","keywords":["CV","surat lamaran","portfolio","application"]}
+  ]},
+  {"id":"research","name":"Research & Final Project","subtitle":"Turn questions into discoveries","description":"Dari ide awal sampai naskah penelitian yang bisa dipertanggungjawabkan.","accent":"#477fc0","topics":[
+    {"id":"research-ideas","name":"Research Topics & Ideas","keywords":["ide riset","topik penelitian","proposal"]},
+    {"id":"final-project-archive","name":"Final Project Archive","keywords":["skripsi","TA","tugas akhir","thesis"]},
+    {"id":"papers","name":"Research Papers & Publications","keywords":["paper","artikel ilmiah","publikasi","jurnal"]},
+    {"id":"research-methods","name":"Research Methods & Tools","keywords":["metode penelitian","statistika","analisis data","metodologi"]},
+    {"id":"writing-submission","name":"Writing & Submission Templates","keywords":["sitasi","APA","template TA","penulisan"]}
+  ]},
+  {"id":"competition","name":"Competition & Skill Development","subtitle":"Go further than the classroom","description":"Bekal kompetisi, teknologi, serta kemampuan untuk berkembang.","accent":"#1685b1","topics":[
+    {"id":"business-case","name":"Business Case & Mini Case","keywords":["BCC","business case competition","case interview","strategy","mini case","consulting"]},
+    {"id":"business-plan","name":"Business Plan & Entrepreneurship","keywords":["BPC","business plan","wirausaha","startup","entrepreneurship"]},
+    {"id":"supply-chain","name":"Supply Chain & Logistics","keywords":["supply chain","logistik","inventory","warehouse","SCM"]},
+    {"id":"data-ai","name":"Data Analytics & AI","keywords":["machine learning","python","data analysis","AI","analytics"]},
+    {"id":"scientific-writing","name":"Scientific Writing & Innovation","keywords":["PKM","essay","paper","inovasi","karya tulis"]},
+    {"id":"tools-software","name":"Tools & Software Academy","keywords":["excel","power bi","CPLEX","optimization","software","tools"]},
+    {"id":"competition-toolkit","name":"Cross-Competition Toolkit","keywords":["pitch deck","presentasi","framework","gantt","proposal"]}
+  ]},
+  {"id":"alumni","name":"Alumni & Industry","subtitle":"People, insight, possibility","description":"Pelajaran dari alumni, dunia industri, dan peluang berkolaborasi.","accent":"#237da4","topics":[
+    {"id":"career-stories","name":"Alumni Stories & Career Paths","keywords":["karier","career","alumni","career path"]},
+    {"id":"mentoring","name":"Mentoring & Knowledge Sharing","keywords":["mentor","mentoring","sharing","diskusi"]},
+    {"id":"industry-collaboration","name":"Industry Projects & Collaboration","keywords":["kolaborasi","industry project","perusahaan"]},
+    {"id":"opportunities","name":"Opportunities & Events","keywords":["event","seminar","lowongan","opportunity","magang"]},
+    {"id":"approved-profiles","name":"Approved Alumni Profiles","keywords":["profil alumni","jejaring","networking","opt-in"]}
+  ]}
+]
