@@ -1,34 +1,67 @@
 {
-  "version": "1.1.0-pilot",
-  "siteName": "SILOGBIS Knowledge Hub",
+  "version": "3.1.0",
   "mode": "pilot",
+  "internalAccess": {
+    "academic": {
+      "enabled": false,
+      "aclVerified": false,
+      "url": ""
+    },
+    "internship": {
+      "enabled": false,
+      "aclVerified": false,
+      "url": ""
+    },
+    "research": {
+      "enabled": false,
+      "aclVerified": false,
+      "url": ""
+    },
+    "competition": {
+      "enabled": false,
+      "aclVerified": false,
+      "url": ""
+    },
+    "alumni": {
+      "enabled": false,
+      "aclVerified": false,
+      "url": ""
+    }
+  },
   "forms": [
     {
       "id": "resource",
-      "title": "Share a Resource",
-      "description": "Bagikan materi atau referensi yang memiliki izin untuk dibagikan.",
       "enabled": false,
-      "url": "",
       "qaVerified": false,
-      "privacyNoticeApproved": false
+      "privacyNoticeApproved": false,
+      "url": ""
     },
     {
       "id": "kp",
-      "title": "Share Your KP Journey",
-      "description": "Cerita KP dan pengalaman magang untuk membantu angkatan berikutnya.",
       "enabled": false,
-      "url": "",
       "qaVerified": false,
-      "privacyNoticeApproved": false
+      "privacyNoticeApproved": false,
+      "url": ""
     },
     {
       "id": "alumni",
-      "title": "Connect as Alumni",
-      "description": "Bergabung dalam jejaring dan berbagi pengalaman secara sukarela.",
       "enabled": false,
-      "url": "",
       "qaVerified": false,
-      "privacyNoticeApproved": false
+      "privacyNoticeApproved": false,
+      "url": ""
     }
-  ]
+  ],
+  "rootFolder": {
+    "enabled": true,
+    "aclVerified": true,
+    "label": "Buka Google Drive SILOGBIS (akun berizin)",
+    "url": "https://drive.google.com/drive/folders/1-tydJfSQLQlVjTSMgWDlYT8J4yfev8qT"
+  },
+  "quickLinks": {
+    "academic": [],
+    "internship": [],
+    "research": [],
+    "competition": [],
+    "alumni": []
+  }
 }

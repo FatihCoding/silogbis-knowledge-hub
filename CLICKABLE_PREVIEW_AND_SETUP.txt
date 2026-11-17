@@ -1,0 +1,37 @@
+SILOGBIS V3.1 - QUICK START
+
+WHAT IS IN THIS PACKAGE
+- public/index.html + five category routes: live six-page Cloudflare site
+- SILOGBIS_V3_1_Interactive_Preview.html (separate attachment): standalone offline preview
+- public/data/catalog.json: approved PUBLIC files only; currently []
+- public/data/site-config.json: forms, internal access, and quick category links
+- backend/Find_Five_Drive_Category_Links.gs: read-only helper to print five exact folder URLs
+
+WHAT WORKS RIGHT NOW
+1. Home -> each category page when hosted on Cloudflare.
+2. Search/filter per category.
+3. Home -> Buka Google Drive utama: goes to actual official SILOGBIS root, but Google still controls access.
+4. Direct links per category will work after admin adds exact links to quickLinks and verified=true.
+5. File links appear when catalog.json contains records that passed public release gate.
+
+HOW TO ENABLE CATEGORY SHORTCUTS
+1. From your SILOGBIS Google Apps Script project, add backend/Find_Five_Drive_Category_Links.gs.
+2. Run listSilogbisFiveCategoryLinksV31 (read-only).
+3. Copy generated five URLs. Do not copy Master Control / Alumni private sheet URLs.
+4. Test each folder URL from a separate permitted Google account.
+5. Open public/data/site-config.json and replace the entire quickLinks object with the printed JSON.
+6. Change verified from false to true ONLY for folder links verified by an authorized viewer account.
+7. Do not add Master Control/Private Alumni Registry URLs to public data.
+8. Commit changes to GitHub; Cloudflare will redeploy.
+9. Visitors who lack Google permission will see an access denied prompt. Do not make restricted reports public merely to avoid that.
+
+CONTRIBUTOR UPLOAD
+Current Form Resource is URL-based and CLOSED. It is NOT a direct file upload service.
+Simplest existing workflow: senior uploads to THEIR Google Drive, shares a reviewer-readable link, and submits the URL via the existing Form after it is opened for intake. Admin reviews and only then curates the file.
+For a direct upload to SILOGBIS storage, add a File Upload question manually to the existing Google Form and adapt its submission-processing script to accept uploaded file IDs. File Upload requires Google sign-in; do not give contributors Editor access to the library root. Never claim this feature is ready before editing and QA.
+
+REPO UPDATE
+Extract a zip on Windows does NOT modify GitHub/Cloudflare. Upload files with the SAME paths; commit to main; check new Cloudflare deployment. Old files in repository stay unless deleted deliberately.
+
+LIVE STATUS
+The site is currently pilot/noindex and does not contain public resources. Do not launch until reviewed content, permissions and Forms are configured.

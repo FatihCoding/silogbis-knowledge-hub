@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-# Indexing is disabled via robots meta tag until launch approval.
+# Pilot uses noindex meta on every HTML page. Do not block crawling while noindex applies.
