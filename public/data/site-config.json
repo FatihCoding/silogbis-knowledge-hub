@@ -58,10 +58,55 @@
     "url": "https://drive.google.com/drive/folders/1-tydJfSQLQlVjTSMgWDlYT8J4yfev8qT"
   },
   "quickLinks": {
-    "academic": [],
-    "internship": [],
-    "research": [],
-    "competition": [],
-    "alumni": []
+    "academic": [
+      {
+        "label": "Folder Academic Resources",
+        "url": "https://drive.google.com/drive/folders/1DgJUw2uA58xSD_mAFnACm81UxmyOhQr7",
+        "access": "Internal",
+        "enabled": true,
+        "verified": false,
+        "pilotLink": true
+      }
+    ],
+    "internship": [
+      {
+        "label": "Folder KP & Internship",
+        "url": "https://drive.google.com/drive/folders/1y7mBx3ZBd-KbaihIeX2-m0C7FMmrMp1z",
+        "access": "Internal",
+        "enabled": true,
+        "verified": false,
+        "pilotLink": true
+      }
+    ],
+    "research": [
+      {
+        "label": "Folder Research & Final Project",
+        "url": "https://drive.google.com/drive/folders/1OQrU5OYcjatipUFSwhjX2yb5-gTZQev9",
+        "access": "Internal",
+        "enabled": true,
+        "verified": false,
+        "pilotLink": true
+      }
+    ],
+    "competition": [
+      {
+        "label": "Folder Competition & Skill Development",
+        "url": "https://drive.google.com/drive/folders/10xDYNPV7GpF8r2U3bbBWq4d65GGXM3gu",
+        "access": "Internal",
+        "enabled": true,
+        "verified": false,
+        "pilotLink": true
+      }
+    ],
+    "alumni": [
+      {
+        "label": "Folder Alumni & Industry",
+        "url": "https://drive.google.com/drive/folders/1v9PZL7VSDn9714laZsv5cZ2voi84XhRi",
+        "access": "Internal",
+        "enabled": true,
+        "verified": false,
+        "pilotLink": true
+      }
+    ]
   }
 }

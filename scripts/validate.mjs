@@ -43,6 +43,7 @@ for(const r of catalog){
  for(const key of ['email','phone','whatsapp','contactEmail','rawResponse','privateNotes','accessToken','reviewer'])assert.ok(!(key in r),`Sensitive field forbidden: ${key}`);
 }
 assert.ok(['pilot','public'].includes(config.mode),'Site mode must be pilot or public');
+if(config.mode==='public')for(const links of Object.values(config.quickLinks||{}))for(const entry of links)assert.ok(!entry.pilotLink||entry.enabled!==true,'Pilot-only links must be disabled for public release');
 if(config.mode==='public'){
  assert.ok(catalog.length>=1,'Public launch requires at least one approved resource');
  for(const file of ['index.html',...Object.values(routes).map(x=>x+'/index.html')])assert.ok(!/name="robots" content="noindex/.test(read(file)),'Public launch cannot keep noindex meta');
@@ -59,7 +60,7 @@ if(rootFolder.enabled){assert.ok(rootFolder.aclVerified,'Root shortcut must have
 for(const [hubId,links] of Object.entries(config.quickLinks||{})){
  assert.ok(ids.has(hubId),'Unrecognized shortcut hub');assert.ok(Array.isArray(links),'shortcuts should be a list');
  for(const link of links){
-  if(link.enabled){assert.equal(link.verified,true,'Direct shortcut needs verified permission');assert.ok(https(link.url),'Invalid shortcut URL');const u=new URL(link.url);assert.ok(u.hostname==='drive.google.com'&&u.pathname.startsWith('/drive/folders/')||u.hostname==='docs.google.com'&&u.pathname.startsWith('/spreadsheets/d/'),'Only approved Drive folders or Sheets shortcuts permitted');}
+  if(link.enabled){const pilotOnly=config.mode==='pilot'&&link.pilotLink===true&&link.access==='Internal'&&link.verified===false;if(!pilotOnly)assert.equal(link.verified,true,'Direct shortcut needs verified permission');assert.ok(https(link.url),'Invalid shortcut URL');const u=new URL(link.url);assert.ok(u.hostname==='drive.google.com'&&u.pathname.startsWith('/drive/folders/')||u.hostname==='docs.google.com'&&u.pathname.startsWith('/spreadsheets/d/'),'Only approved Drive folders or Sheets shortcuts permitted');}
   for(const forbidden of privateIds)assert.ok(!JSON.stringify(link).includes(forbidden),'Private admin spreadsheet accidentally exposed');
  }
 }
